@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AlteryxDocument yxmdVer="2024.1">
+  <Nodes>
+    <Node ToolID="1">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="54"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."ORDER_FACT"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="ORDER_ID" type="V_WString"/>
+          <Field name="CUSTOMER_KEY" type="Int32"/>
+          <Field name="PRODUCT_KEY" type="Int32"/>
+          <Field name="STORE_KEY" type="Int32"/>
+          <Field name="DATE_KEY" type="Int32"/>
+          <Field name="CHANNEL_KEY" type="Int32"/>
+          <Field name="GROSS_REVENUE" type="Double"/>
+          <Field name="COGS" type="Double"/>
+          <Field name="CHANNEL" type="V_WString"/>
+          <Field name="IS_CANCELLED" type="Int32"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="2">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="150"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."CUSTOMER_DIM"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="CUSTOMER_KEY" type="Int32"/>
+          <Field name="CUSTOMER_SEGMENT" type="V_WString"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="3">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="246"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."PRODUCT_DIM"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="PRODUCT_KEY" type="Int32"/>
+          <Field name="PRODUCT_NAME" type="V_WString"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="342"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."STORE_DIM"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="STORE_KEY" type="Int32"/>
+          <Field name="STORE_NAME" type="V_WString"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="438"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."DATE_DIM"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="DATE_KEY" type="Int32"/>
+          <Field name="CAL_DATE" type="Date"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="6">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput"><Position x="54" y="534"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <File>odbc:DSN=Snowflake;DATABASE=DEMO_DB;SCHEMA=DEMO|||"DEMO_DB"."DEMO"."CHANNEL_DIM"</File>
+        </Configuration>
+        <MetaInfo connection="Output"><RecordInfo>
+          <Field name="CHANNEL_KEY" type="Int32"/>
+          <Field name="CHANNEL" type="V_WString"/>
+        </RecordInfo></MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput"/>
+    </Node>
+    <Node ToolID="7">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join"><Position x="252" y="100"/></GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left"><Field field="CUSTOMER_KEY"/></JoinInfo>
+          <JoinInfo connection="Right"><Field field="CUSTOMER_KEY"/></JoinInfo>
+        </Configuration>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin"/>
+    </Node>
+    <Node ToolID="8">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join"><Position x="400" y="160"/></GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left"><Field field="PRODUCT_KEY"/></JoinInfo>
+          <JoinInfo connection="Right"><Field field="PRODUCT_KEY"/></JoinInfo>
+        </Configuration>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin"/>
+    </Node>
+    <Node ToolID="9">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula"><Position x="560" y="160"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="[GROSS_REVENUE] / ([GROSS_REVENUE] + [COGS])" field="GROSS_MARGIN_PCT" type="Double"/>
+            <FormulaField expression='IIF([CHANNEL] = "Web", "Online", "Offline")' field="CHANNEL_GROUP" type="V_WString"/>
+          </FormulaFields>
+        </Configuration>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula"/>
+    </Node>
+    <Node ToolID="10">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter"><Position x="720" y="160"/></GuiSettings>
+      <Properties>
+        <Configuration>
+          <Expression>[IS_CANCELLED] = 0</Expression>
+        </Configuration>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFilter"/>
+    </Node>
+  </Nodes>
+  <Connections>
+    <Connection><Origin ToolID="1" Connection="Output"/><Destination ToolID="7" Connection="Left"/></Connection>
+    <Connection><Origin ToolID="2" Connection="Output"/><Destination ToolID="7" Connection="Right"/></Connection>
+    <Connection><Origin ToolID="7" Connection="Join"/><Destination ToolID="8" Connection="Left"/></Connection>
+    <Connection><Origin ToolID="3" Connection="Output"/><Destination ToolID="8" Connection="Right"/></Connection>
+    <Connection><Origin ToolID="8" Connection="Join"/><Destination ToolID="9" Connection="Input"/></Connection>
+    <Connection><Origin ToolID="9" Connection="Output"/><Destination ToolID="10" Connection="Input"/></Connection>
+  </Connections>
+  <Properties>
+    <Memory default="512"/>
+  </Properties>
+</AlteryxDocument>

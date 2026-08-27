@@ -1,0 +1,212 @@
+{
+  "dataModel": {
+    "name": "Alteryx Workflow",
+    "schemaVersion": 1,
+    "pages": [
+      {
+        "id": "id0001",
+        "name": "Page 1",
+        "elements": [
+          {
+            "id": "id0002",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "CUSTOMER_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0003/CUSTOMER_KEY",
+                "formula": "[CUSTOMER_DIM/Customer Key]",
+                "hidden": true
+              },
+              {
+                "id": "inode-NORM0004/FIRST_NAME",
+                "formula": "[CUSTOMER_DIM/First Name]"
+              },
+              {
+                "id": "inode-NORM0005/CUSTOMER_SEGMENT",
+                "formula": "[CUSTOMER_DIM/Customer Segment]"
+              }
+            ],
+            "order": [
+              "inode-NORM0003/CUSTOMER_KEY",
+              "inode-NORM0004/FIRST_NAME",
+              "inode-NORM0005/CUSTOMER_SEGMENT"
+            ]
+          },
+          {
+            "id": "id0006",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "ORDER_FACT"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0007/ORDER_ID",
+                "formula": "[ORDER_FACT/Order Id]"
+              },
+              {
+                "id": "inode-NORM0008/CUSTOMER_KEY",
+                "formula": "[ORDER_FACT/Customer Key]"
+              },
+              {
+                "id": "inode-NORM0009/GROSS_REVENUE",
+                "formula": "[ORDER_FACT/Gross Revenue]"
+              },
+              {
+                "id": "inode-NORM0010/DISCOUNT_AMOUNT",
+                "formula": "[ORDER_FACT/Discount Amount]"
+              }
+            ],
+            "order": [
+              "inode-NORM0007/ORDER_ID",
+              "inode-NORM0008/CUSTOMER_KEY",
+              "inode-NORM0009/GROSS_REVENUE",
+              "inode-NORM0010/DISCOUNT_AMOUNT"
+            ],
+            "relationships": [
+              {
+                "id": "id0011",
+                "targetElementId": "id0002",
+                "keys": [
+                  {
+                    "sourceColumnId": "inode-NORM0008/CUSTOMER_KEY",
+                    "targetColumnId": "inode-NORM0003/CUSTOMER_KEY"
+                  }
+                ],
+                "name": "CUSTOMER_DIM",
+                "relationshipType": "N:1"
+              }
+            ]
+          },
+          {
+            "id": "id0012",
+            "kind": "table",
+            "name": "Order Fact View",
+            "source": {
+              "kind": "table",
+              "elementId": "id0006"
+            },
+            "columns": [
+              {
+                "id": "id0013",
+                "formula": "[ORDER_FACT/Order Id]"
+              },
+              {
+                "id": "id0014",
+                "formula": "[ORDER_FACT/Customer Key]"
+              },
+              {
+                "id": "id0015",
+                "formula": "[ORDER_FACT/Gross Revenue]"
+              },
+              {
+                "id": "id0016",
+                "formula": "[ORDER_FACT/Discount Amount]"
+              },
+              {
+                "id": "id0017",
+                "formula": "[ORDER_FACT/CUSTOMER_DIM/First Name]",
+                "hidden": true
+              },
+              {
+                "id": "id0018",
+                "formula": "[ORDER_FACT/CUSTOMER_DIM/Customer Segment]",
+                "hidden": true
+              },
+              {
+                "id": "id0019",
+                "formula": "If([ORDER_FACT/CUSTOMER_DIM/Customer Segment] = \"Premium\", [ORDER_FACT/Gross Revenue] * 1.1, [ORDER_FACT/Gross Revenue])",
+                "name": "Segment Adjusted Revenue",
+                "format": {
+                  "kind": "number",
+                  "formatString": "$,.2f",
+                  "currencySymbol": "$"
+                }
+              }
+            ],
+            "order": [
+              "id0013",
+              "id0014",
+              "id0015",
+              "id0016",
+              "id0017",
+              "id0018",
+              "id0019"
+            ],
+            "folders": [
+              {
+                "id": "id0020",
+                "name": "Customer Dim",
+                "items": [
+                  "id0017",
+                  "id0018"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    "Input \"ORDER_FACT\": 4 columns",
+    "Input \"CUSTOMER_DIM\": 3 columns",
+    "Join: ORDER_FACT.CUSTOMER_KEY=CUSTOMER_DIM.CUSTOMER_KEY (assumed N:1 on ORDER_FACT → CUSTOMER_DIM)",
+    "Formula \"SEGMENT_ADJUSTED_REVENUE\" → If([Customer Segment] = \"Premium\", [Gross Revenue] * 1.1, [G",
+    "ℹ 1 calc col(s) moved to derived \"Order Fact View\" (cross-element refs)"
+  ],
+  "stats": {
+    "elements": 3,
+    "columns": 14,
+    "metrics": 0,
+    "relationships": 1,
+    "tools": 4,
+    "converted": 4,
+    "ignored": 0,
+    "dbtOfframps": 0,
+    "gaps": 0
+  },
+  "gaps": [
+    {
+      "toolId": "1",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "2",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "3",
+      "plugin": "AlteryxBasePluginsGui.Join.Join",
+      "family": "join",
+      "kind": "converted",
+      "reason": "Join → Sigma relationship"
+    },
+    {
+      "toolId": "4",
+      "plugin": "AlteryxBasePluginsGui.Formula.Formula",
+      "family": "formula",
+      "kind": "converted",
+      "reason": "Formula → calculated column (unmapped functions still offramp)"
+    }
+  ]
+}

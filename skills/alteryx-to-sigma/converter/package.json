@@ -1,0 +1,24 @@
+{
+  "name": "alteryx-to-sigma-converter",
+  "version": "0.1.0",
+  "description": "Alteryx Designer workflow (.yxmd) → Sigma data model. Owned by the alteryx-to-sigma skill; conversion is local (no hosted converter).",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "alteryx-to-sigma": "cli.ts"
+  },
+  "scripts": {
+    "convert": "node --import tsx/esm cli.ts",
+    "test": "node --import tsx/esm --test alteryx.test.ts",
+    "bundle": "esbuild cli.ts --bundle --format=esm --platform=node --outfile=cli.mjs"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

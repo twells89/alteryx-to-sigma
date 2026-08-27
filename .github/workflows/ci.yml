@@ -1,0 +1,126 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bundle-freshness:
+    name: converter bundle is fresh vs converter/*.ts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      # Production runs the COMMITTED bundle (converter/cli.mjs) with plain
+      # node -- no tsx, no hosted converter. A converter/*.ts edit that ships
+      # without re-bundling silently ships the OLD behavior. This gate hashes
+      # the bundled TS sources and compares against PROVENANCE.json.
+      - run: ruby tools/check-alteryx-bundle.rb
+
+  unit-tests:
+    name: converter unit tests (offline, creds-free)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: npm ci (locked deps)
+        working-directory: skills/alteryx-to-sigma/converter
+        run: npm ci
+      - name: npm test
+        working-directory: skills/alteryx-to-sigma/converter
+        run: npm test
+
+  corpus:
+    name: regression corpus (offline, creds-free)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: ruby/setup-ruby@v1
+        with:
+          # Pinned: ruby json >= 2.8 pretty-prints empty containers compactly,
+          # which turns every golden byte-compare into an opaque diff. The
+          # goldens were generated under 3.3.
+          ruby-version: '3.3'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: corpus_check self-test
+        run: python3 corpus/lib/test_corpus_check.py
+      - name: run corpus
+        # The corpus runs the committed bundle directly -- no npm install, which
+        # is the point: it proves cli.mjs is self-contained.
+        env:
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+        run: ./corpus/run-corpus.sh --check
+
+  agent-variants:
+    name: generated/ agent variants match SKILL.md
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      # generated/{codex,cursor,cline,continue} are derived from SKILL.md.
+      # Fail if a SKILL.md edit shipped without re-running the generator.
+      - run: ruby tools/check-agent-variants.rb
+
+  assessment:
+    name: alteryx-assessment readout (${{ matrix.os }})
+    # BOTH filesystems on purpose. The estate-count regression this pins
+    # (a brace glob double-matching every file) only reproduces on a
+    # case-INsensitive filesystem, so an ubuntu-only leg would be green
+    # while macOS users got a doubled readout.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - run: ./tools/test-assessment-inventory.sh
+
+  offline-converter:
+    name: converter has no network egress
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      # The premise of this skill is that a customer's .yxmd never leaves the
+      # box: conversion is a pure local parse. Guard that as an invariant of the
+      # SHIPPED bundle, not just as prose in SKILL.md. (The companion check --
+      # that migrate-alteryx.rb and cli.ts never reach for a hosted converter --
+      # is enforced by corpus/alteryx/orders-join/checks.sh.)
+      - name: no network primitives in the converter
+        run: |
+          if grep -nE "fetch\(|node:https?|require\(['\"]https?|XMLHttpRequest|axios|node:net|node:dgram" \
+               skills/alteryx-to-sigma/converter/cli.mjs \
+               skills/alteryx-to-sigma/converter/*.ts ; then
+            echo "::error::converter gained a network primitive — conversion must stay offline"
+            exit 1
+          fi
+          echo "OK: converter is a pure local parse (no network primitives)"

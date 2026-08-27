@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "alteryx-to-sigma",
+  "displayName": "Alteryx → Sigma",
+  "version": "0.1.2",
+  "description": "Convert an Alteryx Designer workflow (.yxmd) into a Sigma data model (tables, joins, formulas, metrics). Data-model only — no workbook. Local converter (no MCP). ETL that Sigma should not fake is flagged as a dbt/warehouse offramp. Bundles alteryx-to-sigma + a file-based alteryx-assessment.",
+  "author": {
+    "name": "Thomas Wells"
+  },
+  "license": "MIT",
+  "keywords": [
+    "alteryx",
+    "yxmd",
+    "sigma",
+    "migration",
+    "data-model",
+    "dbt",
+    "converter"
+  ],
+  "skills": "./skills/"
+}

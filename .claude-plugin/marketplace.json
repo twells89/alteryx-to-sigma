@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-marketplace-manifest.json",
+  "name": "alteryx-to-sigma",
+  "description": "Alteryx Designer workflow (.yxmd) → Sigma data model. Data-model only; the converter is local (no MCP, no .yxmd egress). ETL that Sigma should not fake is flagged as a dbt offramp. Bundles alteryx-to-sigma + a read-only alteryx-assessment.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Thomas Wells"
+  },
+  "plugins": [
+    {
+      "name": "alteryx-to-sigma",
+      "source": "./",
+      "description": "Alteryx Designer workflow (.yxmd) → Sigma data model. Data-model only; local converter (no MCP). ETL Sigma should not fake is flagged as a dbt offramp. Bundles alteryx-to-sigma + alteryx-assessment.",
+      "category": "migration",
+      "keywords": [
+        "alteryx",
+        "migration",
+        "bi"
+      ]
+    }
+  ]
+}

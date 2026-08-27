@@ -1,0 +1,455 @@
+{
+  "dataModel": {
+    "name": "Alteryx Workflow",
+    "schemaVersion": 1,
+    "pages": [
+      {
+        "id": "id0001",
+        "name": "Page 1",
+        "elements": [
+          {
+            "id": "id0002",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "CUSTOMER_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0003/CUSTOMER_KEY",
+                "formula": "[CUSTOMER_DIM/Customer Key]"
+              },
+              {
+                "id": "inode-NORM0004/CUSTOMER_SEGMENT",
+                "formula": "[CUSTOMER_DIM/Customer Segment]"
+              }
+            ],
+            "order": [
+              "inode-NORM0003/CUSTOMER_KEY",
+              "inode-NORM0004/CUSTOMER_SEGMENT"
+            ]
+          },
+          {
+            "id": "id0005",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "PRODUCT_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0006/PRODUCT_KEY",
+                "formula": "[PRODUCT_DIM/Product Key]"
+              },
+              {
+                "id": "inode-NORM0007/PRODUCT_NAME",
+                "formula": "[PRODUCT_DIM/Product Name]"
+              }
+            ],
+            "order": [
+              "inode-NORM0006/PRODUCT_KEY",
+              "inode-NORM0007/PRODUCT_NAME"
+            ]
+          },
+          {
+            "id": "id0008",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "STORE_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0009/STORE_KEY",
+                "formula": "[STORE_DIM/Store Key]"
+              },
+              {
+                "id": "inode-NORM0010/STORE_NAME",
+                "formula": "[STORE_DIM/Store Name]"
+              }
+            ],
+            "order": [
+              "inode-NORM0009/STORE_KEY",
+              "inode-NORM0010/STORE_NAME"
+            ]
+          },
+          {
+            "id": "id0011",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "DATE_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0012/DATE_KEY",
+                "formula": "[DATE_DIM/Date Key]"
+              },
+              {
+                "id": "inode-NORM0013/CAL_DATE",
+                "formula": "[DATE_DIM/Cal Date]"
+              }
+            ],
+            "order": [
+              "inode-NORM0012/DATE_KEY",
+              "inode-NORM0013/CAL_DATE"
+            ]
+          },
+          {
+            "id": "id0014",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "CHANNEL_DIM"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0015/CHANNEL_KEY",
+                "formula": "[CHANNEL_DIM/Channel Key]"
+              },
+              {
+                "id": "inode-NORM0016/CHANNEL",
+                "formula": "[CHANNEL_DIM/Channel]"
+              }
+            ],
+            "order": [
+              "inode-NORM0015/CHANNEL_KEY",
+              "inode-NORM0016/CHANNEL"
+            ]
+          },
+          {
+            "id": "id0017",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "ORDER_FACT"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0018/ORDER_ID",
+                "formula": "[ORDER_FACT/Order Id]"
+              },
+              {
+                "id": "inode-NORM0019/CUSTOMER_KEY",
+                "formula": "[ORDER_FACT/Customer Key]"
+              },
+              {
+                "id": "inode-NORM0020/PRODUCT_KEY",
+                "formula": "[ORDER_FACT/Product Key]"
+              },
+              {
+                "id": "inode-NORM0021/STORE_KEY",
+                "formula": "[ORDER_FACT/Store Key]"
+              },
+              {
+                "id": "inode-NORM0022/DATE_KEY",
+                "formula": "[ORDER_FACT/Date Key]"
+              },
+              {
+                "id": "inode-NORM0023/CHANNEL_KEY",
+                "formula": "[ORDER_FACT/Channel Key]"
+              },
+              {
+                "id": "inode-NORM0024/GROSS_REVENUE",
+                "formula": "[ORDER_FACT/Gross Revenue]"
+              },
+              {
+                "id": "inode-NORM0025/COGS",
+                "formula": "[ORDER_FACT/Cogs]"
+              },
+              {
+                "id": "inode-NORM0026/CHANNEL",
+                "formula": "[ORDER_FACT/Channel]"
+              },
+              {
+                "id": "inode-NORM0027/IS_CANCELLED",
+                "formula": "[ORDER_FACT/Is Cancelled]"
+              },
+              {
+                "id": "id0028",
+                "formula": "[Gross Revenue] / ([Gross Revenue] + [Cogs])",
+                "name": "Gross Margin Pct",
+                "format": {
+                  "kind": "number",
+                  "formatString": ",.2%"
+                }
+              },
+              {
+                "id": "id0029",
+                "formula": "If([Channel] = \"Web\", \"Online\", \"Offline\")",
+                "name": "Channel Group"
+              }
+            ],
+            "order": [
+              "inode-NORM0018/ORDER_ID",
+              "inode-NORM0019/CUSTOMER_KEY",
+              "inode-NORM0020/PRODUCT_KEY",
+              "inode-NORM0021/STORE_KEY",
+              "inode-NORM0022/DATE_KEY",
+              "inode-NORM0023/CHANNEL_KEY",
+              "inode-NORM0024/GROSS_REVENUE",
+              "inode-NORM0025/COGS",
+              "inode-NORM0026/CHANNEL",
+              "inode-NORM0027/IS_CANCELLED",
+              "id0028",
+              "id0029"
+            ],
+            "relationships": [
+              {
+                "id": "id0030",
+                "targetElementId": "id0002",
+                "keys": [
+                  {
+                    "sourceColumnId": "inode-NORM0019/CUSTOMER_KEY",
+                    "targetColumnId": "inode-NORM0003/CUSTOMER_KEY"
+                  }
+                ],
+                "name": "CUSTOMER_DIM",
+                "relationshipType": "N:1"
+              },
+              {
+                "id": "id0031",
+                "targetElementId": "id0005",
+                "keys": [
+                  {
+                    "sourceColumnId": "inode-NORM0020/PRODUCT_KEY",
+                    "targetColumnId": "inode-NORM0006/PRODUCT_KEY"
+                  }
+                ],
+                "name": "PRODUCT_DIM",
+                "relationshipType": "N:1"
+              }
+            ]
+          },
+          {
+            "id": "id0032",
+            "kind": "table",
+            "name": "Order Fact View",
+            "source": {
+              "kind": "table",
+              "elementId": "id0017"
+            },
+            "columns": [
+              {
+                "id": "id0033",
+                "formula": "[ORDER_FACT/Order Id]"
+              },
+              {
+                "id": "id0034",
+                "formula": "[ORDER_FACT/Customer Key]"
+              },
+              {
+                "id": "id0035",
+                "formula": "[ORDER_FACT/Product Key]"
+              },
+              {
+                "id": "id0036",
+                "formula": "[ORDER_FACT/Store Key]"
+              },
+              {
+                "id": "id0037",
+                "formula": "[ORDER_FACT/Date Key]"
+              },
+              {
+                "id": "id0038",
+                "formula": "[ORDER_FACT/Channel Key]"
+              },
+              {
+                "id": "id0039",
+                "formula": "[ORDER_FACT/Gross Revenue]"
+              },
+              {
+                "id": "id0040",
+                "formula": "[ORDER_FACT/Cogs]"
+              },
+              {
+                "id": "id0041",
+                "formula": "[ORDER_FACT/Channel]"
+              },
+              {
+                "id": "id0042",
+                "formula": "[ORDER_FACT/Is Cancelled]"
+              },
+              {
+                "id": "id0043",
+                "formula": "[ORDER_FACT/Gross Margin Pct]"
+              },
+              {
+                "id": "id0044",
+                "formula": "[ORDER_FACT/Channel Group]"
+              },
+              {
+                "id": "id0045",
+                "formula": "[ORDER_FACT/CUSTOMER_DIM/Customer Segment]",
+                "hidden": true
+              },
+              {
+                "id": "id0046",
+                "formula": "[ORDER_FACT/PRODUCT_DIM/Product Name]",
+                "hidden": true
+              }
+            ],
+            "order": [
+              "id0033",
+              "id0034",
+              "id0035",
+              "id0036",
+              "id0037",
+              "id0038",
+              "id0039",
+              "id0040",
+              "id0041",
+              "id0042",
+              "id0043",
+              "id0044",
+              "id0045",
+              "id0046"
+            ],
+            "folders": [
+              {
+                "id": "id0047",
+                "name": "Customer Dim",
+                "items": [
+                  "id0045"
+                ]
+              },
+              {
+                "id": "id0048",
+                "name": "Product Dim",
+                "items": [
+                  "id0046"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    "Input \"ORDER_FACT\": 10 columns",
+    "Input \"CUSTOMER_DIM\": 2 columns",
+    "Input \"PRODUCT_DIM\": 2 columns",
+    "Input \"STORE_DIM\": 2 columns",
+    "Input \"DATE_DIM\": 2 columns",
+    "Input \"CHANNEL_DIM\": 2 columns",
+    "Join: ORDER_FACT.CUSTOMER_KEY=CUSTOMER_DIM.CUSTOMER_KEY (assumed N:1 on ORDER_FACT → CUSTOMER_DIM)",
+    "Join: ORDER_FACT.PRODUCT_KEY=PRODUCT_DIM.PRODUCT_KEY (assumed N:1 on ORDER_FACT → PRODUCT_DIM)",
+    "Formula \"GROSS_MARGIN_PCT\" → [Gross Revenue] / ([Gross Revenue] + [Cogs])",
+    "Formula \"CHANNEL_GROUP\" → If([Channel] = \"Web\", \"Online\", \"Offline\")",
+    "Filter: [IS_CANCELLED] = 0 — consider adding as RLS"
+  ],
+  "stats": {
+    "elements": 7,
+    "columns": 36,
+    "metrics": 0,
+    "relationships": 2,
+    "tools": 10,
+    "converted": 10,
+    "ignored": 0,
+    "dbtOfframps": 0,
+    "gaps": 0
+  },
+  "gaps": [
+    {
+      "toolId": "1",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "2",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "3",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "4",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "5",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "6",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "7",
+      "plugin": "AlteryxBasePluginsGui.Join.Join",
+      "family": "join",
+      "kind": "converted",
+      "reason": "Join → Sigma relationship"
+    },
+    {
+      "toolId": "8",
+      "plugin": "AlteryxBasePluginsGui.Join.Join",
+      "family": "join",
+      "kind": "converted",
+      "reason": "Join → Sigma relationship"
+    },
+    {
+      "toolId": "9",
+      "plugin": "AlteryxBasePluginsGui.Formula.Formula",
+      "family": "formula",
+      "kind": "converted",
+      "reason": "Formula → calculated column (unmapped functions still offramp)"
+    },
+    {
+      "toolId": "10",
+      "plugin": "AlteryxBasePluginsGui.Filter.Filter",
+      "family": "filter",
+      "kind": "converted",
+      "reason": "Filter → warning / optional RLS"
+    }
+  ]
+}

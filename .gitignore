@@ -1,0 +1,37 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Secrets / local env — NEVER commit a Sigma token
+.env
+.sigma_env
+.token
+*.token
+sigma-env.sh
+# get_token.py writes a LIVE bearer token here (0600)
+auth.json
+
+# Run artifacts written by migrate-alteryx.rb / post-and-readback.rb
+dm.json
+dm-map.json
+dm-match.json
+signature.json
+dbt-offramp.json
+parity-final.json
+alteryx-run/
+*.log
+
+# Customer inputs — keep real .yxmd exports out of the repo.
+# The three synthetic fixtures under skills/alteryx-to-sigma/fixtures/ are
+# force-added and tracked; anything else is not.
+*.yxmd
+*.yxmc
+*.yxdb
+!skills/alteryx-to-sigma/fixtures/*.yxmd

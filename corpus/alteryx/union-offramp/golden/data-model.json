@@ -1,0 +1,108 @@
+{
+  "dataModel": {
+    "name": "Alteryx Workflow",
+    "schemaVersion": 1,
+    "pages": [
+      {
+        "id": "id0001",
+        "name": "Page 1",
+        "elements": [
+          {
+            "id": "id0002",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "EAST_ORDERS"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0003/ORDER_ID",
+                "formula": "[EAST_ORDERS/Order Id]"
+              },
+              {
+                "id": "inode-NORM0004/AMOUNT",
+                "formula": "[EAST_ORDERS/Amount]"
+              }
+            ],
+            "order": [
+              "inode-NORM0003/ORDER_ID",
+              "inode-NORM0004/AMOUNT"
+            ]
+          },
+          {
+            "id": "id0005",
+            "kind": "table",
+            "source": {
+              "connectionId": "PLACEHOLDER-CONNECTION-ID",
+              "kind": "warehouse-table",
+              "path": [
+                "DEMO_DB",
+                "DEMO",
+                "WEST_ORDERS"
+              ]
+            },
+            "columns": [
+              {
+                "id": "inode-NORM0006/ORDER_ID",
+                "formula": "[WEST_ORDERS/Order Id]"
+              },
+              {
+                "id": "inode-NORM0007/AMOUNT",
+                "formula": "[WEST_ORDERS/Amount]"
+              }
+            ],
+            "order": [
+              "inode-NORM0006/ORDER_ID",
+              "inode-NORM0007/AMOUNT"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    "dbt-offramp Tool 3 (union): Union stacks rows — Sigma relationships do not UNION.",
+    "Input \"EAST_ORDERS\": 2 columns",
+    "Input \"WEST_ORDERS\": 2 columns"
+  ],
+  "stats": {
+    "elements": 2,
+    "columns": 4,
+    "metrics": 0,
+    "relationships": 0,
+    "tools": 3,
+    "converted": 2,
+    "ignored": 0,
+    "dbtOfframps": 1,
+    "gaps": 0
+  },
+  "gaps": [
+    {
+      "toolId": "1",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "2",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "family": "input",
+      "kind": "converted",
+      "reason": "Input Data → warehouse-table element"
+    },
+    {
+      "toolId": "3",
+      "plugin": "AlteryxBasePluginsGui.Union.Union",
+      "family": "union",
+      "kind": "dbt-offramp",
+      "reason": "Union stacks rows — Sigma relationships do not UNION.",
+      "dbtHint": "Port this tool to a dbt model (UNION ALL of the input tables) and point Sigma at the materialized table. Do not fake it as a Sigma calc column."
+    }
+  ]
+}

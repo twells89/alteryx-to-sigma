@@ -1,0 +1,12 @@
+{
+  "source": "in-skill converter/cli.ts (alteryx.ts + cli.ts + sigma-ids.ts)",
+  "bundler": "esbuild --bundle --format=esm --platform=node",
+  "vendored_modules": "cli.mjs",
+  "source_sha256": "0608f2800334360a3fd53540745d0f957f3874cc81ffb98018faa010a6c30552",
+  "sources": [
+    "alteryx.ts",
+    "cli.ts",
+    "sigma-ids.ts"
+  ],
+  "note": "cli.mjs is GENERATED from converter/*.ts — do not hand-edit. After editing any converter/*.ts, re-run ( cd skills/alteryx-to-sigma/converter && npm install && npm run bundle ); ruby tools/check-alteryx-bundle.rb --write (rebuilds cli.mjs + refreshes source_sha256). CI gate: tools/check-alteryx-bundle.rb."
+}
